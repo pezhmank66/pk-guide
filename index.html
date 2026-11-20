@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>از خرید شما متشکریم | مرکز آموزش تصویری و گام‌به‌گام اتصال</title>
+  <style>
+    :root {
+      --bg-base: #040814;
+      --glass-bg: rgba(15, 23, 42, 0.58);
+      --glass-bg-hover: rgba(30, 41, 59, 0.74);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-highlight: rgba(125, 211, 252, 0.48);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #22c55e;
+      --accent-indigo: #818cf8;
+      --accent-red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "IRANSans", "Vazirmatn", Tahoma, system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.85;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* بک‌گراند سه‌بعدی و متحرک خالص CSS + Canvas */
+    .scene-3d-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      overflow: hidden;
+      perspective: 1100px;
+      background:
+        radial-gradient(circle at 75% 15%, rgba(56, 189, 248, 0.16), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.13), transparent 42%),
+        linear-gradient(155deg, #040814 0%, #071226 52%, #050b18 100%);
+    }
+
+    .grid-3d {
+      position: absolute;
+      width: 220%;
+      height: 220%;
+      left: -60%;
+      top: -45%;
+      background-image:
+        linear-gradient(to right, rgba(56, 189, 248, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(129, 140, 248, 0.11) 1px, transparent 1px);
+      background-size: 64px 64px;
+      transform: rotateX(62deg) translateZ(-120px);
+      transform-style: preserve-3d;
+      animation: gridDrift 20s linear infinite;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 18%, transparent 74%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 18%, transparent 74%);
+    }
+
+    @keyframes gridDrift {
+      0% {
+        transform: rotateX(62deg) translateY(0px) translateZ(-120px);
+      }
+      100% {
+        transform: rotateX(62deg) translateY(64px) translateZ(-120px);
+      }
+    }
+
+    .floating-cube {
+      position: fixed;
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(129, 140, 248, 0.03));
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      z-index: -2;
+      animation: cubeFloat3D 14s ease-in-out infinite;
+    }
+
+    .cube-a {
+      top: 12%;
+      right: 8%;
+      animation-delay: 0s;
+    }
+
+    .cube-b {
+      bottom: 14%;
+      left: 7%;
+      width: 140px;
+      height: 140px;
+      border-color: rgba(34, 197, 94, 0.22);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(56, 189, 248, 0.03));
+      animation-delay: -6s;
+    }
+
+    @keyframes cubeFloat3D {
+      0% {
+        transform: translate3d(0, 0, 0) rotateX(18deg) rotateY(-22deg) rotateZ(0deg);
+      }
+      50% {
+        transform: translate3d(-18px, 24px, 40px) rotateX(-16deg) rotateY(26deg) rotateZ(12deg);
+      }
+      100% {
+        transform: translate3d(14px, -20px, -20px) rotateX(22deg) rotateY(-18deg) rotateZ(-8deg);
+      }
+    }
+
+    #particles3d {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* هدر شیشه‌ای */
+    .glass-header {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      border-radius: 22px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(34, 197, 94, 0.2));
+      border: 1px solid rgba(125, 211, 252, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 22px rgba(56, 189, 248, 0.22);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 1.32rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .brand-text p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-pill {
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #bae6fd;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    /* نوارهای انتخاب شیشه‌ای */
+    .bar-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .proto-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .os-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .glass-btn {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 20px rgba(0, 0, 0, 0.22);
+      border-radius: 16px;
+      padding: 13px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .os-bar .glass-btn {
+      flex-direction: column;
+      gap: 5px;
+      padding: 12px 10px;
+    }
+
+    .glass-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-highlight);
+    }
+
+    .glass-btn.active-proto {
+      background: linear-gradient(145deg, rgba(56, 189, 248, 0.28), rgba(14, 165, 233, 0.12));
+      border-color: rgba(56, 189, 248, 0.85);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    .glass-btn.active-os {
+      background: linear-gradient(145deg, rgba(34, 197, 94, 0.28), rgba(21, 128, 61, 0.12));
+      border-color: rgba(74, 222, 128, 0.82);
+      box-shadow: 0 0 24px rgba(34, 197, 94, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    .glass-btn:disabled {
+      opacity: 0.36;
+      cursor: not-allowed;
+      filter: grayscale(0.6);
+    }
+
+    .proto-icon-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    }
+
+    .btn-tag {
+      font-size: 0.72rem;
+      color: #fca5a5;
+      font-weight: 500;
+    }
+
+    /* کارت اصلی آموزش */
+    .guide-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 28px;
+    }
+
+    .guide-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .guide-header h2 {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .guide-header p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .guide-actions-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dl-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.32), rgba(14, 165, 233, 0.18));
+      border: 1px solid rgba(125, 211, 252, 0.65);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.86rem;
+      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.22);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .dl-pill-btn:hover {
+      transform: translateY(-2px);
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.44), rgba(14, 165, 233, 0.26));
+    }
+
+    .dl-pill-btn.secondary-dl {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.26), rgba(21, 128, 61, 0.16));
+      border-color: rgba(74, 222, 128, 0.62);
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.18);
+    }
+
+    .dl-pill-btn.secondary-dl:hover {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.38), rgba(21, 128, 61, 0.24));
+    }
+
+    .dl-pill-btn.builtin {
+      background: rgba(148, 163, 184, 0.14);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #e2e8f0;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .dl-pill-btn.builtin:hover {
+      transform: none;
+    }
+
+    /* دسته‌بندی‌های داخل بخش آموزش (مثلاً برنامه پیشنهادی و برنامه جایگزین) */
+    .sub-group-title {
+      margin: 8px 0 14px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(56, 189, 248, 0.11);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .sub-group-title.alt-style {
+      margin-top: 24px;
+      background: rgba(34, 197, 94, 0.11);
+      border-color: rgba(74, 222, 128, 0.35);
+    }
+
+    .sub-group-title strong {
+      font-size: 0.98rem;
+      color: #ffffff;
+    }
+
+    .sub-group-title span {
+      font-size: 0.84rem;
+      color: #cbd5e1;
+    }
+
+    /* مراحل آموزش */
+    .steps-list {
+      list-style: none;
+      display: grid;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .step-item {
+      background: rgba(9, 15, 28, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 18px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .step-body {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .step-badge {
+      min-width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      color: #7dd3fc;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .step-copy h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .step-copy p {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    .ui-key {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.38);
+      color: #bae6fd;
+      padding: 0 7px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      direction: ltr;
+    }
+
+    .svg-stage {
+      background: rgba(4, 8, 17, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .svg-stage svg {
+      width: 100%;
+      max-width: 330px;
+      height: auto;
+      display: block;
+    }
+
+    .tip-box {
+      background: rgba(245, 158, 11, 0.11);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fde68a;
+      border-radius: 16px;
+      padding: 13px 16px;
+      font-size: 0.88rem;
+    }
+
+    /* بخش دانلود سریع */
+    .quick-dl-section {
+      margin-top: 10px;
+    }
+
+    .quick-dl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .quick-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .quick-card h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .quick-list {
+      list-style: none;
+      display: grid;
+      gap: 9px;
+      font-size: 0.86rem;
+    }
+
+    .quick-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 7px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .quick-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .quick-links-pair {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .quick-link-pill {
+      padding: 4px 10px;
+      border-radius: 9px;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.36);
+      color: #e0f2fe;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .quick-link-pill:hover {
+      text-decoration: none;
+      background: rgba(56, 189, 248, 0.28);
+    }
+
+    .quick-link-pill.alt {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.42);
+      color: #dcfce7;
+    }
+
+    .builtin-tag {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin-top: 34px;
+    }
+
+    @media (max-width: 960px) {
+      .quick-dl-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .step-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .proto-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .guide-panel {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-3d-wrapper" aria-hidden="true">
+    <div class="grid-3d"></div>
+  </div>
+  <div class="floating-cube cube-a" aria-hidden="true"></div>
+  <div class="floating-cube cube-b" aria-hidden="true"></div>
+  <canvas id="particles3d" aria-hidden="true"></canvas>
+
+  <div class="container">
+    <header class="glass-header">
+      <div class="brand-wrap">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 3L24 7.5V14.5C24 20.6 19.7 25.4 14 27C8.3 25.4 4 20.6 4 14.5V7.5L14 3Z" stroke="#38bdf8" stroke-width="2" fill="rgba(56,189,248,0.14)"/>
+            <path d="M9.5 14.2L12.6 17.3L18.8 11.1" stroke="#22c55e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>از خرید شما متشکریم</h1>
+          <p>مرکز آموزش تصویری و گام‌به‌گام اتصال</p>
+        </div>
+      </div>
+      <span class="header-pill">راهنمای مرحله‌به‌مرحله اتصال</span>
+    </header>
+
+    <div class="bar-label">۱. انتخاب سرویس:</div>
+    <div class="proto-bar" id="protoBar" role="tablist" aria-label="انتخاب سرویس"></div>
+
+    <div class="bar-label">۲. انتخاب سیستم‌عامل:</div>
+    <div class="os-bar" id="osBar" role="tablist" aria-label="انتخاب سیستم‌عامل"></div>
+
+    <main class="guide-panel" id="guidePanel">
+      <div class="guide-header">
+        <div>
+          <h2 id="guideTitle"></h2>
+          <p id="guideDesc"></p>
+        </div>
+        <div class="guide-actions-group" id="guideAction"></div>
+      </div>
+
+      <div id="sectionsContainer"></div>
+      <div class="tip-box" id="tipBox"></div>
+    </main>
+
+    <section class="quick-dl-section" aria-label="دانلود سریع">
+      <div class="bar-label">دانلود سریع</div>
+      <div class="quick-dl-grid" id="quickDlGrid"></div>
+    </section>
+
+    <footer class="site-footer">
+      مرکز آموزش تصویری و گام‌به‌گام اتصال
+    </footer>
+  </div>
+
+  <script>
+    // ذرات سه‌بعدی با عمق (z) در پس‌زمینه
+    (function init3DParticles() {
+      const canvas = document.getElementById("particles3d");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const nodes = Array.from({ length: 34 }, (_, i) => ({
+        x: (Math.random() - 0.5) * 900,
+        y: (Math.random() - 0.5) * 650,
+        z: 180 + Math.random() * 650,
+        vz: -0.45 - Math.random() * 0.45,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        color: i % 3 === 0 ? "56, 189, 248" : i % 3 === 1 ? "34, 197, 94" : "129, 140, 248"
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        const fov = 420;
+        const cx = width / 2;
+        const cy = height / 2;
+
+        for (const n of nodes) {
+          n.x += n.vx;
+          n.y += n.vy;
+          n.z += n.vz;
+
+          if (n.z < 90) {
+            n.z = 820;
+            n.x = (Math.random() - 0.5) * 900;
+            n.y = (Math.random() - 0.5) * 650;
+          }
+
+          const scale = fov / (fov + n.z);
+          const sx = cx + n.x * scale;
+          const sy = cy + n.y * scale;
+          const radius = Math.max(1.2, 4.2 * scale);
+          const alpha = Math.min(0.75, Math.max(0.12, (1 - n.z / 900) * 0.8));
+
+          ctx.beginPath();
+          ctx.arc(sx, sy, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${n.color}, ${alpha})`;
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    })();
+
+    // آیکون‌های اختصاصی بر اساس ۷ آیکون باکیفیت ارسالی
+    const PROTO_ICONS = {
+      amnezia: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="amzRingGrad" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#fb923c"/>
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#090c12"/>
+          <circle cx="16" cy="16" r="8.5" stroke="url(#amzRingGrad)" stroke-width="2.1"/>
+          <path d="M16 5L21 25M11 25L16 5M7.5 12.5H24.5M8.5 20.5L23.5 10" stroke="url(#amzRingGrad)" stroke-width="2.1" stroke-linecap="round"/>
+        </svg>
+      `,
+      wireguard: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#06070a"/>
+          <ellipse cx="16" cy="16" rx="11.5" ry="12.5" fill="#991b1b"/>
+          <path d="M16.5 7.5C18.8 7.5 20.2 9.2 19.4 11.3C18.7 13 16.5 13.7 15 15C13 16.7 12.6 19.6 14.3 21.6C15.9 23.4 19.1 23.5 20.8 21.8C22.4 20.2 22.1 17.5 20.2 16.5C18.2 15.5 15.6 16.5 14.8 18.6" stroke="#06070a" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="17.3" cy="10.2" r="1.2" fill="#06070a"/>
+        </svg>
+      `,
+      v2ray: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#050608"/>
+          <path d="M6.5 10L10.8 21L15.2 10" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="14.5" y="25.5" fill="#ffffff" font-family="sans-serif" font-size="10.5" font-weight="900">2</text>
+          <path d="M22.5 8.5L27 11.1V16.3L22.5 18.9L18 16.3V11.1L22.5 8.5Z" stroke="#ffffff" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M18.3 11.3L22.5 13.7L26.7 11.3M22.5 13.7V18.6" stroke="#ffffff" stroke-width="1.5"/>
+        </svg>
+      `,
+      openvpn: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#050608"/>
+          <path d="M7.5 15A8.5 8.5 0 1 1 24.5 15A8.5 8.5 0 0 1 21 21.8L18.6 19.3A5.2 5.2 0 1 0 13.4 19.3L11 21.8A8.5 8.5 0 0 1 7.5 15Z" fill="#f97316"/>
+          <circle cx="16" cy="14.5" r="3.4" fill="#1e3a8a"/>
+          <path d="M14 17.2L12.1 25.5H19.9L18 17.2" fill="#1e3a8a"/>
+        </svg>
+      `,
+      openconnect: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <radialGradient id="ocSphere" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="75%" stop-color="#e2e8f0"/>
+              <stop offset="100%" stop-color="#94a3b8"/>
+            </radialGradient>
+          </defs>
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#050608"/>
+          <circle cx="16" cy="16" r="11" fill="url(#ocSphere)"/>
+          <path d="M5.8 14.5C9.5 11.5 15.5 11.5 19.5 15.5C22.5 18.5 23.5 22 22.8 24.8" stroke="#1d4ed8" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M7 18.5C11.5 12 18.5 8.5 23.5 8" stroke="#16a34a" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      `,
+      l2tp: `
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="l2tpGrad" x1="2" y1="6" x2="30" y2="26" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#1e201f"/>
+          <text x="16" y="16.5" text-anchor="middle" fill="url(#l2tpGrad)" font-family="sans-serif" font-size="9.5" font-weight="900">L2TP</text>
+          <text x="16" y="24.5" text-anchor="middle" fill="#e2e8f0" font-family="sans-serif" font-size="5.3" font-weight="700">TUNNELING</text>
+        </svg>
+      `
+    };
+
+    const PROTOCOLS = [
+      { id: "amnezia", name: "Amnezia" },
+      { id: "wireguard", name: "WireGuard" },
+      { id: "v2ray", name: "V2Ray" },
+      { id: "openvpn", name: "OpenVPN" },
+      { id: "openconnect", name: "OpenConnect" },
+      { id: "l2tp", name: "L2TP" }
+    ];
+
+    const OS_LIST = [
+      { id: "android", name: "اندروید" },
+      { id: "windows", name: "ویندوز" },
+      { id: "ios", name: "iOS" }
+    ];
+
+    function redArrow(x, y, tag = "") {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <circle cx="0" cy="0" r="10" fill="#ef4444" fill-opacity="0.24"/>
+          <circle cx="0" cy="0" r="4.5" fill="#ef4444"/>
+          <path d="M-22,0 L-7,0" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M-12,-4.5 L-6,0 L-12,4.5" fill="none" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          ${tag ? `<text x="-26" y="4" text-anchor="end" fill="#fca5a5" font-family="Vazirmatn, Tahoma" font-size="9.5" font-weight="700">${tag}</text>` : ""}
+        </g>
+      `;
+    }
+
+    function renderMockup(os, screenTitle, bodySvg, height = 228) {
+      if (os === "ios") {
+        return `
+          <svg viewBox="0 0 264 ${height}" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="4" width="252" height="${height - 8}" rx="28" fill="#0b1220" stroke="#64748b" stroke-width="2.2"/>
+            <rect x="16" y="14" width="232" height="${height - 28}" rx="20" fill="#070d19"/>
+            <rect x="94" y="18" width="76" height="13" rx="6.5" fill="#020617"/>
+            <text x="28" y="28" fill="#94a3b8" font-family="sans-serif" font-size="9" font-weight="700">9:41</text>
+            <text x="234" y="28" text-anchor="end" fill="#94a3b8" font-family="sans-serif" font-size="9">iOS</text>
+            <text x="132" y="45" text-anchor="middle" fill="#38bdf8" font-family="Vazirmatn, Tahoma" font-size="10" font-weight="700">${screenTitle}</text>
+            <g transform="translate(18, 52)">${bodySvg}</g>
+            <rect x="97" y="${height - 21}" width="70" height="3.5" rx="2" fill="#475569"/>
+          </svg>
+        `;
+      }
+      if (os === "windows") {
+        return `
+          <svg viewBox="0 0 320 ${height}" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="6" width="312" height="${height - 12}" rx="10" fill="#0b1220" stroke="#38bdf8" stroke-opacity="0.45" stroke-width="1.8"/>
+            <rect x="4" y="6" width="312" height="24" rx="10" fill="#172338"/>
+            <text x="16" y="22" fill="#f1f5f9" font-family="Vazirmatn, Tahoma" font-size="9.5" font-weight="700">${screenTitle}</text>
+            <text x="272" y="21.5" fill="#94a3b8" font-family="sans-serif" font-size="10">—  □</text>
+            <rect x="294" y="11" width="14" height="14" rx="3" fill="#ef4444"/>
+            <text x="301" y="21.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5">×</text>
+            <g transform="translate(14, 38)">${bodySvg}</g>
+          </svg>
+        `;
+      }
+      return `
+        <svg viewBox="0 0 264 ${height}" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="4" width="248" height="${height - 8}" rx="22" fill="#0b1220" stroke="#22c55e" stroke-opacity="0.45" stroke-width="2"/>
+          <rect x="16" y="12" width="232" height="${height - 24}" rx="15" fill="#070d19"/>
+          <circle cx="132" cy="21" r="4" fill="#1e293b"/>
+          <text x="28" y="24" fill="#94a3b8" font-family="sans-serif" font-size="9">Android</text>
+          <text x="132" y="42" text-anchor="middle" fill="#4ade80" font-family="Vazirmatn, Tahoma" font-size="10" font-weight="700">${screenTitle}</text>
+          <g transform="translate(18, 48)">${bodySvg}</g>
+          <rect x="106" y="${height - 20}" width="52" height="3.5" rx="2" fill="#475569"/>
+        </svg>
+      `;
+    }
+
+    const GUIDES = {
+      wireguard: {
+        android: {
+          title: "WireGuard — اندروید",
+          desc: "نصب برنامه رسمی WireGuard از Google Play، ذخیره/انتخاب فایل کانفیگ و برقراری اتصال",
+          actions: [
+            { label: "دانلود از Google Play", url: "https://play.google.com/store/apps/details?id=com.wireguard.android" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "ذخیره فایل کانفیگ و باز کردن WireGuard",
+                  text: "فایل کانفیگ (<span class='ui-key'>.conf</span>) را در حافظه گوشی (مثلاً پوشه <span class='ui-key'>Download</span>) ذخیره کنید، برنامه <span class='ui-key'>WireGuard</span> را باز کنید و روی دکمه <span class='ui-key'>+</span> پایین سمت راست بزنید.",
+                  svg: renderMockup("android", "WireGuard Android", `
+                    <rect x="12" y="14" width="204" height="26" rx="7" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="31" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="9">Download/config.conf ذخیره شد</text>
+                    <circle cx="182" cy="96" r="21" fill="#2563eb" stroke="#ef4444" stroke-width="2"/>
+                    <text x="182" y="102" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="16" font-weight="bold">+</text>
+                    ${redArrow(158, 96, "بزنید")}
+                  `, 208)
+                },
+                {
+                  title: "انتخاب Import from file or archive",
+                  text: "گزینه <span class='ui-key'>Import from file or archive</span> را بزنید و فایل کانفیگ <span class='ui-key'>.conf</span> ذخیره‌شده را انتخاب کنید.",
+                  svg: renderMockup("android", "افزودن کانفیگ", `
+                    <rect x="14" y="22" width="200" height="32" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="42" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5">Import from file or archive</text>
+                    <rect x="14" y="62" width="200" height="30" rx="8" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="81" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="9.5">Scan from QR code</text>
+                    ${redArrow(214, 38, "فایل .conf")}
+                  `, 204)
+                },
+                {
+                  title: "روشن کردن سوئیچ و تایید OK",
+                  text: "سوئیچ کنار نام کانفیگ را روشن کنید و در پیغام درخواست مجوز VPN روی <span class='ui-key'>OK</span> بزنید تا وضعیت به <span class='ui-key'>Active</span> تغییر کند.",
+                  svg: renderMockup("android", "اتصال WireGuard", `
+                    <rect x="12" y="32" width="204" height="46" rx="9" fill="#0f172a" stroke="#22c55e" stroke-width="1.8"/>
+                    <text x="24" y="52" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">PK-NETWORKS</text>
+                    <text x="24" y="68" fill="#4ade80" font-family="sans-serif" font-size="9">Active</text>
+                    <rect x="168" y="46" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(166, 55, "روشن")}
+                  `, 204)
+                }
+              ]
+            }
+          ],
+          tip: "اگر کانفیگ به صورت QR Code ارسال شده باشد، در مرحله دوم گزینه Scan from QR code را انتخاب و تصویر را اسکن کنید."
+        },
+        windows: {
+          title: "WireGuard — ویندوز",
+          desc: "ذخیره فایل کانفیگ، نصب کلاینت رسمی ویندوز و فعال‌سازی اتصال",
+          actions: [
+            { label: "دانلود نصبی ویندوز (.exe)", url: "https://download.wireguard.com/windows-client/wireguard-installer.exe" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "ذخیره فایل .conf و کلیک روی Import tunnel(s) from file",
+                  text: "فایل کانفیگ (<span class='ui-key'>.conf</span>) را روی سیستم ذخیره کنید، برنامه <span class='ui-key'>WireGuard</span> را باز کنید و روی <span class='ui-key'>Import tunnel(s) from file...</span> کلیک نمایید.",
+                  svg: renderMockup("windows", "WireGuard Windows", `
+                    <rect x="28" y="26" width="236" height="34" rx="8" fill="#172338" stroke="#ef4444" stroke-width="2"/>
+                    <text x="146" y="47" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Import tunnel(s) from file...</text>
+                    ${redArrow(266, 43, "کلیک")}
+                  `, 176)
+                },
+                {
+                  title: "زدن دکمه Activate",
+                  text: "پس از انتخاب فایل کانفیگ ذخیره‌شده، روی دکمه <span class='ui-key'>Activate</span> کلیک کنید تا وضعیت کانفیگ روی <span class='ui-key'>Active</span> قرار گیرد.",
+                  svg: renderMockup("windows", "WireGuard — Tunnel", `
+                    <text x="22" y="34" fill="#e2e8f0" font-family="sans-serif" font-size="10.5" font-weight="bold">Status: Active</text>
+                    <rect x="180" y="54" width="90" height="28" rx="7" fill="#2563eb" stroke="#22c55e" stroke-width="1.8"/>
+                    <text x="225" y="72" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10" font-weight="bold">Activate</text>
+                    ${redArrow(178, 68, "Activate")}
+                  `, 176)
+                }
+              ]
+            }
+          ],
+          tip: "برای قطع ارتباط در ویندوز کافی است روی دکمه Deactivate کلیک کنید."
+        },
+        ios: {
+          title: "WireGuard — iOS",
+          desc: "نصب از App Store، افزودن کانفیگ و تایید مجوز VPN در آیفون و آیپد",
+          actions: [
+            { label: "دانلود از App Store", url: "https://apps.apple.com/app/wireguard/id1441195209" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "زدن Add a tunnel و انتخاب فایل یا QR Code",
+                  text: "برنامه <span class='ui-key'>WireGuard</span> را باز کنید، روی <span class='ui-key'>Add a tunnel</span> بزنید و فایل کانفیگ یا QR Code را وارد نمایید.",
+                  svg: renderMockup("ios", "WireGuard iOS", `
+                    <rect x="18" y="34" width="192" height="32" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="54" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5">Create from file or archive</text>
+                    ${redArrow(212, 50, "فایل")}
+                  `, 206)
+                },
+                {
+                  title: "تایید Allow و روشن کردن سوئیچ",
+                  text: "در پیغام سیستم‌عامل iOS گزینه <span class='ui-key'>Allow</span> را بزنید و سوئیچ کنار نام کانفیگ را روشن کنید تا <span class='ui-key'>Active</span> شود.",
+                  svg: renderMockup("ios", "WireGuard — Active", `
+                    <rect x="14" y="34" width="200" height="40" rx="8" fill="#0f172a" stroke="#22c55e"/>
+                    <text x="26" y="58" fill="#fff" font-family="sans-serif" font-size="10">PK-NETWORKS</text>
+                    <rect x="166" y="45" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(164, 54, "ON")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "در iOS می‌توانید فایل .conf را از پیام‌رسان یا Files با دکمه Share مستقیم به WireGuard بفرستید."
+        }
+      },
+
+      amnezia: {
+        android: {
+          title: "Amnezia — اندروید",
+          desc: "آموزش کامل روش سریع «Insert the key» (کپی کد vpn://...) و روش وارد کردن فایل کانفیگ",
+          actions: [
+            { label: "دانلود از Google Play", url: "https://play.google.com/store/apps/details?id=org.amnezia.vpn" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "۱. کپی کردن کد اشتراک و زدن Let's get started",
+                  text: "کد اشتراک (<span class='ui-key'>vpn://...</span>) را کامل کپی کنید. سپس وارد <span class='ui-key'>AmneziaVPN</span> شوید و روی <span class='ui-key'>Let's get started</span> بزنید.",
+                  svg: renderMockup("android", "AmneziaVPN — شروع", `
+                    <rect x="12" y="14" width="204" height="32" rx="8" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="34" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="9.5">vpn://... (کپی شد)</text>
+                    <rect x="26" y="66" width="176" height="36" rx="10" fill="#2563eb" stroke="#ef4444" stroke-width="2"/>
+                    <text x="114" y="88" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Let's get started</text>
+                    ${redArrow(204, 84, "بزنید")}
+                  `, 210)
+                },
+                {
+                  title: "۲. روش اول (پیشنهادی): زدن «Insert the key» و پیست کد",
+                  text: "در صفحه انتخاب روش، روی کادر <span class='ui-key'>Insert the key</span> بزنید، کد کپی‌شده را پیست کنید و <span class='ui-key'>Continue</span> را بزنید.",
+                  svg: renderMockup("android", "AmneziaVPN — Key", `
+                    <rect x="12" y="12" width="204" height="44" rx="9" fill="#172338" stroke="#ef4444" stroke-width="2"/>
+                    <text x="114" y="30" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="11" font-weight="bold">Insert the key</text>
+                    <text x="114" y="46" text-anchor="middle" fill="#bae6fd" font-family="sans-serif" font-size="8.8">کد vpn:// را اینجا پیست کنید</text>
+                    <rect x="44" y="72" width="140" height="30" rx="8" fill="#22c55e"/>
+                    <text x="114" y="91" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="10.5" font-weight="bold">Continue</text>
+                    ${redArrow(218, 34, "کلید")}
+                  `, 215)
+                },
+                {
+                  title: "۳. روش دوم: وارد کردن فایل کانفیگ (Open config file)",
+                  text: "اگر به جای کد، فایل کانفیگ دریافت کرده‌اید، در همان صفحه روی <span class='ui-key'>Open config file</span> بزنید و فایل را انتخاب کنید.",
+                  svg: renderMockup("android", "AmneziaVPN — File", `
+                    <rect x="12" y="24" width="204" height="38" rx="9" fill="#172338" stroke="#ef4444" stroke-width="2"/>
+                    <text x="114" y="47" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Open config file</text>
+                    <text x="114" y="80" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="9">انتخاب فایل کانفیگ از حافظه</text>
+                    ${redArrow(218, 43, "فایل")}
+                  `, 205)
+                },
+                {
+                  title: "۴. زدن Connect و تایید مجوز VPN",
+                  text: "در صفحه اصلی روی دایره <span class='ui-key'>Connect</span> بزنید و پیام درخواست VPN را با <span class='ui-key'>OK</span> تایید کنید تا متصل شود.",
+                  svg: renderMockup("android", "AmneziaVPN — متصل", `
+                    <circle cx="114" cy="64" r="32" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.5"/>
+                    <text x="114" y="68" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="10.5" font-weight="bold">Connect</text>
+                    ${redArrow(148, 64, "اتصال")}
+                  `, 205)
+                }
+              ]
+            }
+          ],
+          tip: "در صورت داشتن کد vpn:// استفاده از گزینه Insert the key سریع‌ترین و بدون‌دردسرترین روش اتصال است."
+        },
+        windows: {
+          title: "Amnezia — ویندوز",
+          desc: "دانلود رسمی از amnezia.org/downloads و اتصال با Insert the key یا Open config file",
+          actions: [
+            { label: "دانلود رسمی از Amnezia.org", url: "https://amnezia.org/downloads" },
+            { label: "لینک جایگزین (GitHub)", url: "https://github.com/amnezia-vpn/amnezia-client/releases/latest", secondary: true }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "۱. دانلود از سایت رسمی، کپی کد و زدن Let's get started",
+                  text: "برنامه را از لینک رسمی <span class='ui-key'>amnezia.org/downloads</span> دانلود و نصب کنید. کد <span class='ui-key'>vpn://...</span> را کپی کرده و در برنامه روی <span class='ui-key'>Let's get started</span> کلیک نمایید.",
+                  svg: renderMockup("windows", "AmneziaVPN Windows", `
+                    <rect x="26" y="18" width="240" height="28" rx="7" fill="#0f172a" stroke="#334155"/>
+                    <text x="146" y="36" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="9.5">vpn://... (کپی شد)</text>
+                    <rect x="74" y="60" width="144" height="32" rx="8" fill="#2563eb" stroke="#ef4444" stroke-width="2"/>
+                    <text x="146" y="80" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Let's get started</text>
+                    ${redArrow(220, 76, "کلیک")}
+                  `, 182)
+                },
+                {
+                  title: "۲. کلیک روی «Insert the key» (یا Open config file)",
+                  text: "روی <span class='ui-key'>Insert the key</span> کلیک کنید، کد را پیست نمایید (<span class='ui-key'>Ctrl+V</span>) و <span class='ui-key'>Continue</span> را بزنید (یا برای فایل از <span class='ui-key'>Open config file</span> استفاده کنید).",
+                  svg: renderMockup("windows", "AmneziaVPN — Key / File", `
+                    <rect x="28" y="14" width="236" height="36" rx="8" fill="#172338" stroke="#ef4444" stroke-width="2"/>
+                    <text x="146" y="36" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Insert the key</text>
+                    <rect x="28" y="56" width="236" height="28" rx="8" fill="#0f172a" stroke="#334155"/>
+                    <text x="146" y="74" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="9.5">Open config file</text>
+                    ${redArrow(266, 32, "پیست")}
+                  `, 188)
+                },
+                {
+                  title: "۳. زدن دکمه Connect",
+                  text: "در صفحه اصلی روی دکمه <span class='ui-key'>Connect</span> کلیک کنید تا وضعیت به <span class='ui-key'>Connected</span> تغییر کند.",
+                  svg: renderMockup("windows", "AmneziaVPN — Connected", `
+                    <circle cx="146" cy="52" r="29" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.4"/>
+                    <text x="146" y="56" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="10" font-weight="bold">Connected</text>
+                    ${redArrow(178, 52, "متصل")}
+                  `, 180)
+                }
+              ]
+            }
+          ],
+          tip: "اگر لینک رسمی amnezia.org/downloads با اینترنت ایران باز نشد، ابتدا فیلترشکن را فعال کنید و لینک را باز کنید؛ یا اگر به فیلترشکن دسترسی ندارید، از لینک جایگزین (GitHub: https://github.com/amnezia-vpn/amnezia-client/releases/latest) برای دانلود و نصب برنامه استفاده کنید."
+        },
+        ios: {
+          title: "Amnezia — iOS",
+          desc: "نصب از App Store و اتصال در آیفون و آیپد با Insert the key یا فایل کانفیگ",
+          actions: [
+            { label: "دانلود از App Store", url: "https://apps.apple.com/app/amneziavpn/id1600529900" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "۱. کپی کد و زدن Let's get started در iOS",
+                  text: "کد اشتراک را کپی کنید، وارد <span class='ui-key'>AmneziaVPN</span> شوید و روی <span class='ui-key'>Let's get started</span> ضربه بزنید.",
+                  svg: renderMockup("ios", "AmneziaVPN iOS", `
+                    <rect x="14" y="18" width="200" height="30" rx="8" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="37" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="9">vpn://... (کپی شد)</text>
+                    <rect x="26" y="62" width="176" height="34" rx="10" fill="#2563eb" stroke="#ef4444" stroke-width="2"/>
+                    <text x="114" y="83" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10" font-weight="bold">Let's get started</text>
+                    ${redArrow(204, 79, "بزنید")}
+                  `, 210)
+                },
+                {
+                  title: "۲. زدن «Insert the key» و پیست کد",
+                  text: "روی <span class='ui-key'>Insert the key</span> بزنید، کد را پیست کنید (در صورت نیاز <span class='ui-key'>Allow Paste</span> را بزنید) و <span class='ui-key'>Continue</span> را لمس کنید.",
+                  svg: renderMockup("ios", "AmneziaVPN — Key", `
+                    <rect x="14" y="16" width="200" height="38" rx="9" fill="#172338" stroke="#ef4444" stroke-width="2"/>
+                    <text x="114" y="39" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10.5" font-weight="bold">Insert the key</text>
+                    <rect x="48" y="66" width="132" height="28" rx="8" fill="#22c55e"/>
+                    <text x="114" y="84" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="10" font-weight="bold">Continue</text>
+                    ${redArrow(216, 35, "کلید")}
+                  `, 208)
+                },
+                {
+                  title: "۳. زدن Connect و تایید Allow در iOS",
+                  text: "دکمه <span class='ui-key'>Connect</span> را بزنید و در پنجره سیستم‌عامل روی <span class='ui-key'>Allow</span> کلیک کنید.",
+                  svg: renderMockup("ios", "iOS VPN Prompt", `
+                    <rect x="16" y="20" width="196" height="54" rx="10" fill="#172338" stroke="#38bdf8"/>
+                    <text x="114" y="39" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="9">Add VPN Configuration</text>
+                    <rect x="128" y="46" width="70" height="20" rx="6" fill="#22c55e"/>
+                    <text x="163" y="59" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="9.5" font-weight="bold">Allow</text>
+                    ${redArrow(126, 56, "Allow")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "اگر فایل کانفیگ دارید، می‌توانید در صفحه ورود کلید گزینه Open config file را انتخاب کنید."
+        }
+      },
+
+      openvpn: {
+        android: {
+          title: "OpenVPN — اندروید",
+          desc: "ذخیره کردن فایل کانفیگ (.ovpn)، نصب OpenVPN Connect و فعال‌سازی اتصال",
+          actions: [
+            { label: "دانلود از Google Play", url: "https://play.google.com/store/apps/details?id=net.openvpn.openvpn" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "ذخیره کردن فایل کانفیگ (.ovpn) روی گوشی",
+                  text: "ابتدا فایل کانفیگ (<span class='ui-key'>.ovpn</span>) را در حافظه گوشی (مثلاً پوشه <span class='ui-key'>Download</span>) ذخیره کنید تا در زمان انتخاب فایل به راحتی پیدا شود.",
+                  svg: renderMockup("android", "ذخیره فایل .ovpn", `
+                    <rect x="14" y="24" width="200" height="36" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="46" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5">Save config.ovpn in Download</text>
+                    <text x="114" y="76" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="9">فایل با موفقیت ذخیره شد</text>
+                    ${redArrow(216, 42, "ذخیره")}
+                  `, 204)
+                },
+                {
+                  title: "رفتن به تب Upload File و انتخاب فایل .ovpn",
+                  text: "در <span class='ui-key'>OpenVPN Connect</span> وارد تب <span class='ui-key'>Upload File</span> شوید و روی <span class='ui-key'>Browse</span> بزنید تا فایل <span class='ui-key'>.ovpn</span> ذخیره‌شده انتخاب شود.",
+                  svg: renderMockup("android", "OpenVPN Connect", `
+                    <rect x="112" y="14" width="102" height="25" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="163" y="30" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5" font-weight="bold">Upload File</text>
+                    <rect x="46" y="56" width="132" height="30" rx="7" fill="#2563eb"/>
+                    <text x="112" y="75" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10">Browse (.ovpn)</text>
+                    ${redArrow(110, 26, "تب")}
+                  `, 204)
+                },
+                {
+                  title: "زدن Add و روشن کردن سوئیچ اتصال",
+                  text: "روی <span class='ui-key'>Add</span> بزنید و سپس سوئیچ اتصال را روشن و مجوز VPN را با <span class='ui-key'>OK</span> تایید کنید.",
+                  svg: renderMockup("android", "OpenVPN — Connected", `
+                    <rect x="14" y="34" width="200" height="40" rx="8" fill="#0f172a" stroke="#22c55e"/>
+                    <text x="26" y="58" fill="#4ade80" font-family="sans-serif" font-size="10" font-weight="bold">CONNECTED</text>
+                    <rect x="168" y="45" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(166, 54, "ON")}
+                  `, 204)
+                }
+              ]
+            }
+          ],
+          tip: "در صورت داشتن نام کاربری و رمز عبور، قبل از اتصال در کادرهای مربوطه وارد نمایید."
+        },
+        windows: {
+          title: "OpenVPN — ویندوز",
+          desc: "ذخیره کردن فایل کانفیگ (.ovpn)، نصب OpenVPN Connect و اتصال در ویندوز",
+          actions: [
+            { label: "دانلود رسمی OpenVPN", url: "https://openvpn.net/client/" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "ذخیره فایل .ovpn و وارد کردن در Upload File",
+                  text: "فایل کانفیگ (<span class='ui-key'>.ovpn</span>) را روی ویندوز ذخیره کنید، برنامه را باز کنید، وارد بخش <span class='ui-key'>Upload File</span> شوید و فایل ذخیره‌شده را داخل کادر بکشید یا انتخاب کنید.",
+                  svg: renderMockup("windows", "OpenVPN Windows", `
+                    <rect x="34" y="18" width="224" height="48" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4 3"/>
+                    <text x="146" y="39" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5">ذخیره و انتقال فایل .ovpn</text>
+                    <text x="146" y="55" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="8.5">Drop saved .ovpn file here</text>
+                    ${redArrow(262, 42, ".ovpn")}
+                  `, 178)
+                },
+                {
+                  title: "کلیک روی دکمه Connect",
+                  text: "روی <span class='ui-key'>Connect</span> کلیک کنید تا سوئیچ سبز شود و وضعیت به <span class='ui-key'>CONNECTED</span> برسد.",
+                  svg: renderMockup("windows", "OpenVPN — Connected", `
+                    <rect x="86" y="36" width="120" height="32" rx="7" fill="#22c55e"/>
+                    <text x="146" y="56" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="10.5" font-weight="bold">CONNECTED</text>
+                    ${redArrow(210, 52, "متصل")}
+                  `, 176)
+                }
+              ]
+            }
+          ],
+          tip: "پس از اتصال، آیکون OpenVPN در نوار وظیفه ویندوز فعال نمایش داده می‌شود."
+        },
+        ios: {
+          title: "OpenVPN — iOS",
+          desc: "نصب از App Store، انتقال فایل .ovpn و فعال‌سازی اتصال در آیفون",
+          actions: [
+            { label: "دانلود از App Store", url: "https://apps.apple.com/app/openvpn-connect/id590379981" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "ارسال فایل .ovpn به OpenVPN با Share",
+                  text: "فایل <span class='ui-key'>.ovpn</span> را باز کنید، دکمه <span class='ui-key'>Share</span> را بزنید و گزینه <span class='ui-key'>OpenVPN</span> را انتخاب نمایید.",
+                  svg: renderMockup("ios", "iOS Share Sheet", `
+                    <rect x="20" y="34" width="184" height="32" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="112" y="54" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10">Copy to OpenVPN</text>
+                    ${redArrow(206, 50, "Share")}
+                  `, 206)
+                },
+                {
+                  title: "زدن Add و روشن کردن سوئیچ",
+                  text: "روی <span class='ui-key'>Add</span> بزنید، <span class='ui-key'>Allow</span> را تایید کنید و سوئیچ اتصال را روشن نمایید.",
+                  svg: renderMockup("ios", "OpenVPN — Connected", `
+                    <rect x="14" y="34" width="200" height="38" rx="8" fill="#0f172a" stroke="#22c55e"/>
+                    <text x="26" y="57" fill="#4ade80" font-family="sans-serif" font-size="10" font-weight="bold">CONNECTED</text>
+                    <rect x="166" y="45" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(164, 54, "ON")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "اگر آیکون OpenVPN در ردیف اول Share نبود، روی More بزنید تا ظاهر شود."
+        }
+      },
+
+      v2ray: {
+        android: {
+          title: "V2Ray — اندروید",
+          desc: "برنامه پیشنهادی: v2box | برنامه جایگزین: Hiddify",
+          actions: [
+            { label: "پیشنهادی: v2box (Google Play)", url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box" },
+            { label: "جایگزین: Hiddify (Google Play)", url: "https://play.google.com/store/apps/details?id=app.hiddify.com", secondary: true }
+          ],
+          sections: [
+            {
+              groupTitle: "برنامه پیشنهادی: v2box",
+              groupDesc: "روش اصلی و پیشنهادی اتصال سرویس V2Ray در اندروید",
+              isAlt: false,
+              steps: [
+                {
+                  title: "۱. رفتن به تب Configs (در منوی فارسی: «پیکربندی») و زدن «+»",
+                  text: "لینک اشتراک را کپی کنید. در برنامه <span class='ui-key'>v2Box</span> وارد تب <span class='ui-key'>Configs</span> شوید (اگر منوی گوشی شما فارسی باشد، به جای Configs گزینه <strong>«پیکربندی»</strong> نمایش داده می‌شود) و روی دکمه <span class='ui-key'>+</span> بزنید.",
+                  svg: renderMockup("android", "v2Box — Configs / پیکربندی", `
+                    <rect x="12" y="12" width="204" height="24" rx="6" fill="#0f172a" stroke="#38bdf8"/>
+                    <text x="114" y="28" text-anchor="middle" fill="#bae6fd" font-family="Vazirmatn, Tahoma" font-size="8.5">Configs / منوی فارسی: پیکربندی</text>
+                    <circle cx="194" cy="64" r="13" fill="#2563eb" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="194" y="68" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold">+</text>
+                    ${redArrow(178, 64, "+")}
+                  `, 206)
+                },
+                {
+                  title: "۲. زدن گزینه اول پس از لمس «+» برای افزودن لینک",
+                  text: "پس از زدن <span class='ui-key'>+</span>، <strong>گزینه اول</strong> را بزنید تا لینک اشتراک به برنامه اضافه شود و لیست سرورها در بخش پیکربندی نمایش داده گردد.",
+                  svg: renderMockup("android", "انتخاب گزینه اول", `
+                    <rect x="12" y="22" width="204" height="32" rx="7" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="42" text-anchor="middle" fill="#fff" font-family="Vazirmatn, Tahoma" font-size="9.5" font-weight="bold">۱. گزینه اول (افزودن لینک)</text>
+                    <rect x="12" y="62" width="204" height="28" rx="7" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="80" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="9">سایر گزینه‌ها</text>
+                    ${redArrow(218, 38, "گزینه اول")}
+                  `, 204)
+                },
+                {
+                  title: "۳. زدن دکمه اتصال در تب Home",
+                  text: "سرور را انتخاب کنید، به تب <span class='ui-key'>Home</span> برگردید و دکمه اتصال (<span class='ui-key'>Tap To Connect</span>) را بزنید تا متصل شود.",
+                  svg: renderMockup("android", "v2Box — Home", `
+                    <circle cx="114" cy="64" r="30" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.5"/>
+                    <text x="114" y="68" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="9.5" font-weight="bold">Connected</text>
+                    ${redArrow(148, 64, "اتصال")}
+                  `, 204)
+                }
+              ]
+            },
+            {
+              groupTitle: "برنامه جایگزین: Hiddify",
+              groupDesc: "اگر به جای v2box می‌خواهید از برنامه جایگزین Hiddify استفاده کنید، مراحل زیر را انجام دهید",
+              isAlt: true,
+              steps: [
+                {
+                  title: "۱. کپی لینک اشتراک، زدن «+» و افزودن پروفایل در Hiddify",
+                  text: "لینک اشتراک را کامل کپی کنید، برنامه <span class='ui-key'>Hiddify</span> را باز کنید و با زدن <span class='ui-key'>+</span> پروفایل را از کلیپ‌بورد اضافه نمایید.",
+                  svg: renderMockup("android", "Hiddify — افزودن پروفایل", `
+                    <rect x="12" y="18" width="204" height="30" rx="8" fill="#0f172a" stroke="#38bdf8"/>
+                    <text x="114" y="37" text-anchor="middle" fill="#bae6fd" font-family="sans-serif" font-size="9">لینک اشتراک کپی شد</text>
+                    <circle cx="192" cy="84" r="15" fill="#2563eb" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="192" y="89" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="13" font-weight="bold">+</text>
+                    ${redArrow(174, 84, "+")}
+                  `, 206)
+                },
+                {
+                  title: "۲. تایید مجوز VPN و زدن دکمه اتصال در Hiddify",
+                  text: "در پیغام درخواست مجوز VPN گزینه <span class='ui-key'>OK</span> را بزنید و دکمه اتصال را لمس کنید تا وضعیت به متصل تغییر کند.",
+                  svg: renderMockup("android", "Hiddify — Connected", `
+                    <circle cx="114" cy="64" r="31" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.5"/>
+                    <text x="114" y="68" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="10" font-weight="bold">Connected</text>
+                    ${redArrow(147, 64, "اتصال")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "در منوی فارسی گوشی، تب Configs با نام «پیکربندی» دیده می‌شود و پس از زدن + باید گزینه اول را انتخاب کنید؛ همچنین در تمامی سیستم‌عامل‌ها می‌توانید به جای v2box از Hiddify به‌عنوان برنامه جایگزین استفاده کنید."
+        },
+        windows: {
+          title: "V2Ray — ویندوز (Hiddify)",
+          desc: "آموزش اتصال سرویس V2Ray در ویندوز با برنامه Hiddify",
+          actions: [
+            { label: "دانلود Hiddify ویندوز (GitHub)", url: "https://github.com/hiddify/hiddify-app/releases/latest" }
+          ],
+          sections: [
+            {
+              groupTitle: "برنامه ویندوز: Hiddify",
+              groupDesc: "نصب Hiddify در ویندوز و اتصال با لینک اشتراک V2Ray",
+              isAlt: false,
+              steps: [
+                {
+                  title: "۱. دانلود و نصب Hiddify در ویندوز و کپی لینک اشتراک",
+                  text: "نسخه ویندوز <span class='ui-key'>Hiddify</span> را از لینک رسمی دانلود و نصب کنید و لینک اشتراک V2Ray خود را کامل کپی نمایید.",
+                  svg: renderMockup("windows", "Hiddify Windows", `
+                    <rect x="34" y="24" width="224" height="32" rx="7" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="146" y="44" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10">New Profile / Add From Clipboard</text>
+                    ${redArrow(262, 40, "افزودن")}
+                  `, 176)
+                },
+                {
+                  title: "۲. افزودن پروفایل، تایید مجوز و زدن دکمه اتصال",
+                  text: "لینک را در پروفایل وارد کنید، در صورت نمایش درخواست مجوز شبکه/تونل در ویندوز آن را تایید نمایید و دکمه اتصال را کلیک کنید تا متصل شود.",
+                  svg: renderMockup("windows", "Hiddify — Connected", `
+                    <circle cx="146" cy="52" r="28" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.4"/>
+                    <text x="146" y="56" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="9.5" font-weight="bold">Connected</text>
+                    ${redArrow(177, 52, "فعال")}
+                  `, 176)
+                }
+              ]
+            }
+          ],
+          tip: "در صورت مسدود بودن دسترسی مستقیم به GitHub، فایل نصبی Hiddify را با اینترنت آزاد دانلود و نصب کنید."
+        },
+        ios: {
+          title: "V2Ray — iOS",
+          desc: "برنامه پیشنهادی: v2box | برنامه جایگزین: Hiddify",
+          actions: [
+            { label: "پیشنهادی: v2box (App Store)", url: "https://apps.apple.com/app/v2box-v2ray-client/id6446814690" },
+            { label: "جایگزین: Hiddify (App Store)", url: "https://apps.apple.com/app/hiddify-proxy-vpn/id6596777532", secondary: true }
+          ],
+          sections: [
+            {
+              groupTitle: "برنامه پیشنهادی: v2box",
+              groupDesc: "روش اصلی و پیشنهادی اتصال سرویس V2Ray در آیفون و آیپد",
+              isAlt: false,
+              steps: [
+                {
+                  title: "۱. رفتن به Configs (پیکربندی)، زدن «+» و انتخاب گزینه اول",
+                  text: "لینک اشتراک را کپی کنید، وارد تب <span class='ui-key'>Configs</span> شوید (در منوی فارسی: <strong>«پیکربندی»</strong>)، دکمه <span class='ui-key'>+</span> را بزنید و <strong>گزینه اول</strong> را انتخاب کنید تا لینک به برنامه اضافه شود.",
+                  svg: renderMockup("ios", "v2Box iOS — Configs", `
+                    <rect x="12" y="12" width="204" height="22" rx="6" fill="#0f172a" stroke="#38bdf8"/>
+                    <text x="114" y="26" text-anchor="middle" fill="#bae6fd" font-family="Vazirmatn, Tahoma" font-size="8.2">Configs / منوی فارسی: پیکربندی</text>
+                    <circle cx="194" cy="54" r="11" fill="#2563eb" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="194" y="58" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="11" font-weight="bold">+</text>
+                    <rect x="14" y="72" width="200" height="24" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.5"/>
+                    <text x="114" y="88" text-anchor="middle" fill="#fff" font-family="Vazirmatn, Tahoma" font-size="8.8">۱. گزینه اول (افزودن لینک)</text>
+                    ${redArrow(179, 54, "+")}
+                  `, 208)
+                },
+                {
+                  title: "۲. زدن اتصال در Home و تایید Allow",
+                  text: "به تب <span class='ui-key'>Home</span> بروید، دکمه اتصال را بزنید و در پیغام آیفون روی <span class='ui-key'>Allow</span> ضربه بزنید.",
+                  svg: renderMockup("ios", "v2Box iOS — Connected", `
+                    <circle cx="112" cy="58" r="28" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.5"/>
+                    <text x="112" y="62" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="9.5" font-weight="bold">Connected</text>
+                    ${redArrow(144, 58, "Allow")}
+                  `, 206)
+                }
+              ]
+            },
+            {
+              groupTitle: "برنامه جایگزین: Hiddify",
+              groupDesc: "اگر به جای v2box می‌خواهید از برنامه جایگزین Hiddify در iOS استفاده کنید",
+              isAlt: true,
+              steps: [
+                {
+                  title: "۱. کپی لینک اشتراک، زدن «+» و افزودن پروفایل در Hiddify",
+                  text: "لینک اشتراک را کپی کنید، وارد <span class='ui-key'>Hiddify</span> شوید و با زدن <span class='ui-key'>+</span> پروفایل را اضافه نمایید.",
+                  svg: renderMockup("ios", "Hiddify iOS — افزودن", `
+                    <circle cx="192" cy="22" r="12" fill="#2563eb" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="192" y="26" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="11" font-weight="bold">+</text>
+                    <rect x="16" y="48" width="192" height="28" rx="7" fill="#172338"/>
+                    <text x="112" y="66" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="9">Add Subscription / Clipboard</text>
+                    ${redArrow(177, 22, "+")}
+                  `, 206)
+                },
+                {
+                  title: "۲. زدن اتصال و تایید Allow در آیفون",
+                  text: "دکمه اتصال را لمس کنید و در پنجره سیستم‌عامل iOS گزینه <span class='ui-key'>Allow</span> را بزنید تا متصل شوید.",
+                  svg: renderMockup("ios", "Hiddify iOS — Connected", `
+                    <circle cx="112" cy="58" r="28" fill="#16a34a" fill-opacity="0.22" stroke="#22c55e" stroke-width="2.5"/>
+                    <text x="112" y="62" text-anchor="middle" fill="#4ade80" font-family="sans-serif" font-size="9.5" font-weight="bold">Connected</text>
+                    ${redArrow(144, 58, "Allow")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "در iOS می‌توانید به جای v2box از برنامه جایگزین Hiddify نیز استفاده کنید؛ در منوی فارسی نیز به جای Configs عبارت «پیکربندی» نمایش داده می‌شود."
+        }
+      },
+
+      l2tp: {
+        windows: {
+          title: "L2TP — ویندوز",
+          desc: "ساخت اتصال داخلی L2TP/IPsec از طریق تنظیمات شبکه ویندوز",
+          actions: [
+            { label: "نیاز به نصب برنامه ندارد (داخلی ویندوز)", builtin: true }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "باز کردن Settings > Network & Internet > VPN",
+                  text: "وارد <span class='ui-key'>Settings &gt; Network &amp; Internet &gt; VPN</span> شوید و روی دکمه <span class='ui-key'>Add a VPN connection</span> کلیک کنید.",
+                  svg: renderMockup("windows", "Windows VPN Settings", `
+                    <rect x="24" y="20" width="244" height="32" rx="7" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="146" y="40" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="10" font-weight="bold">Add a VPN connection</text>
+                    ${redArrow(270, 36, "افزودن")}
+                  `, 176)
+                },
+                {
+                  title: "انتخاب Windows (built-in) و تنظیم L2TP/IPsec",
+                  text: "<span class='ui-key'>VPN provider</span> را روی <span class='ui-key'>Windows (built-in)</span> بگذارید، نام دلخواه و <span class='ui-key'>Server name / address</span> را وارد کنید و <span class='ui-key'>VPN type</span> را روی <span class='ui-key'>L2TP/IPsec with pre-shared key</span> قرار دهید.",
+                  svg: renderMockup("windows", "L2TP/IPsec Setup", `
+                    <rect x="20" y="14" width="252" height="24" rx="6" fill="#0f172a" stroke="#334155"/>
+                    <text x="30" y="30" fill="#cbd5e1" font-family="sans-serif" font-size="9">Provider: Windows (built-in)</text>
+                    <rect x="20" y="44" width="252" height="26" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="30" y="61" fill="#fff" font-family="sans-serif" font-size="9" font-weight="bold">Type: L2TP/IPsec with pre-shared key</text>
+                    ${redArrow(274, 57, "L2TP")}
+                  `, 184)
+                },
+                {
+                  title: "وارد کردن نام کاربری، رمز و Pre-shared key و اتصال",
+                  text: "نام کاربری، رمز عبور و <span class='ui-key'>Pre-shared key</span> (در صورت ارسال) را وارد کرده و <span class='ui-key'>Save</span> را بزنید؛ سپس اتصال را انتخاب و <span class='ui-key'>Connect</span> کنید.",
+                  svg: renderMockup("windows", "L2TP — Connect", `
+                    <rect x="24" y="20" width="160" height="26" rx="6" fill="#0f172a" stroke="#334155"/>
+                    <text x="104" y="37" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="9">User / Pass / PSK</text>
+                    <rect x="194" y="20" width="76" height="26" rx="6" fill="#22c55e"/>
+                    <text x="232" y="37" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="9.5" font-weight="bold">Connect</text>
+                    ${redArrow(192, 33, "اتصال")}
+                  `, 176)
+                }
+              ]
+            }
+          ],
+          tip: "در صورت نیاز به Pre-shared key، مقدار دقیق ارسال‌شده را بدون فاصله اضافه وارد کنید."
+        },
+        ios: {
+          title: "L2TP — iOS",
+          desc: "پیکربندی L2TP در تنظیمات داخلی آیفون و آیپد (VPN & Device Management)",
+          actions: [
+            { label: "نیاز به نصب برنامه ندارد (داخلی iOS)", builtin: true }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "رفتن به Settings > General > VPN & Device Management",
+                  text: "در آیفون وارد <span class='ui-key'>Settings &gt; General &gt; VPN &amp; Device Management &gt; VPN</span> شوید و روی <span class='ui-key'>Add Configuration...</span> بزنید.",
+                  svg: renderMockup("ios", "iOS VPN Settings", `
+                    <rect x="16" y="24" width="196" height="32" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="44" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5" font-weight="bold">Add Configuration...</text>
+                    ${redArrow(214, 40, "افزودن")}
+                  `, 206)
+                },
+                {
+                  title: "انتخاب Type: L2TP و تکمیل مشخصات",
+                  text: "روی <span class='ui-key'>Type</span> بزنید و <span class='ui-key'>L2TP</span> را انتخاب کنید. سپس <span class='ui-key'>Description</span>، <span class='ui-key'>Server</span>، <span class='ui-key'>Account</span> (نام کاربری)، <span class='ui-key'>Password</span> و در صورت وجود <span class='ui-key'>Secret</span> (Pre-shared key) را وارد کنید.",
+                  svg: renderMockup("ios", "Add L2TP Config", `
+                    <rect x="14" y="14" width="200" height="24" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.6"/>
+                    <text x="24" y="30" fill="#fff" font-family="sans-serif" font-size="9">Type: L2TP</text>
+                    <rect x="14" y="44" width="200" height="24" rx="6" fill="#0f172a" stroke="#334155"/>
+                    <text x="24" y="60" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">Server / Account / Secret</text>
+                    ${redArrow(216, 26, "L2TP")}
+                  `, 206)
+                },
+                {
+                  title: "زدن Done و روشن کردن سوئیچ Status",
+                  text: "در بالا سمت راست <span class='ui-key'>Done</span> را بزنید، پروفایل ساخته شده را انتخاب کنید و سوئیچ <span class='ui-key'>Status</span> را روشن کنید تا <span class='ui-key'>Connected</span> شود.",
+                  svg: renderMockup("ios", "L2TP — Connected", `
+                    <rect x="14" y="34" width="200" height="38" rx="8" fill="#0f172a" stroke="#22c55e"/>
+                    <text x="26" y="57" fill="#4ade80" font-family="sans-serif" font-size="9.5" font-weight="bold">Status: Connected</text>
+                    <rect x="166" y="45" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(164, 54, "ON")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "در iOS فیلد Secret همان Pre-shared key است؛ اگر برای سرویس شما ارسال شده، دقیق وارد کنید."
+        }
+      },
+
+      openconnect: {
+        android: {
+          title: "OpenConnect — اندروید",
+          desc: "نصب برنامه رسمی OpenConnect از Google Play (بدون استفاده از AnyConnect)",
+          actions: [
+            { label: "دانلود از Google Play", url: "https://play.google.com/store/apps/details?id=app.openconnect" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "باز کردن OpenConnect و زدن دکمه «+»",
+                  text: "برنامه <span class='ui-key'>OpenConnect</span> را باز کنید و روی دکمه <span class='ui-key'>+</span> بزنید تا پروفایل جدید ساخته شود.",
+                  svg: renderMockup("android", "OpenConnect Android", `
+                    <rect x="12" y="20" width="204" height="26" rx="6" fill="#0f172a" stroke="#334155"/>
+                    <text x="114" y="37" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="8.5">از AnyConnect استفاده نکنید</text>
+                    <circle cx="184" cy="86" r="20" fill="#2563eb" stroke="#ef4444" stroke-width="2"/>
+                    <text x="184" y="91" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="15" font-weight="bold">+</text>
+                    ${redArrow(162, 86, "+")}
+                  `, 206)
+                },
+                {
+                  title: "وارد کردن Gateway، نام کاربری و رمز عبور",
+                  text: "آدرس سرور را در کادر <span class='ui-key'>Gateway</span> وارد کنید و سپس <span class='ui-key'>Username</span> و <span class='ui-key'>Password</span> خود را وارد و اتصال را فعال نمایید.",
+                  svg: renderMockup("android", "New OpenConnect Profile", `
+                    <rect x="14" y="18" width="200" height="26" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.6"/>
+                    <text x="24" y="35" fill="#fff" font-family="sans-serif" font-size="9">Gateway (آدرس سرور)</text>
+                    <rect x="14" y="50" width="200" height="26" rx="6" fill="#0f172a" stroke="#334155"/>
+                    <text x="24" y="67" fill="#cbd5e1" font-family="sans-serif" font-size="9">Username &amp; Password</text>
+                    ${redArrow(216, 31, "سرور")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "حتماً از برنامه OpenConnect استفاده کنید؛ برنامه AnyConnect رمز عبور را ذخیره نمی‌کند."
+        },
+        windows: {
+          title: "OpenConnect (AnyConnect) — ویندوز",
+          desc: "اتصال در ویندوز از طریق کلاینت AnyConnect با وارد کردن آدرس سرور و مشخصات",
+          actions: [
+            { label: "دانلود AnyConnect", url: "https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/series.html" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "باز کردن AnyConnect و وارد کردن آدرس سرور",
+                  text: "برنامه <span class='ui-key'>AnyConnect</span> را در ویندوز باز کنید، آدرس سرور را در کادر آدرس بنویسید و روی دکمه <span class='ui-key'>Connect</span> کلیک کنید.",
+                  svg: renderMockup("windows", "AnyConnect — Windows", `
+                    <rect x="24" y="20" width="172" height="28" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="34" y="38" fill="#fff" font-family="sans-serif" font-size="9.5">server.example.com</text>
+                    <rect x="204" y="20" width="72" height="28" rx="6" fill="#22c55e"/>
+                    <text x="240" y="38" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="9.5" font-weight="bold">Connect</text>
+                    ${redArrow(202, 34, "Connect")}
+                  `, 176)
+                },
+                {
+                  title: "وارد کردن نام کاربری و رمز عبور و تایید",
+                  text: "در پنجره بازشده پس از زدن Connect، <span class='ui-key'>Username</span> و <span class='ui-key'>Password</span> خود را وارد و تایید کنید تا اتصال برقرار شود.",
+                  svg: renderMockup("windows", "AnyConnect — Login", `
+                    <rect x="44" y="18" width="204" height="26" rx="6" fill="#0f172a" stroke="#38bdf8"/>
+                    <text x="146" y="35" text-anchor="middle" fill="#e2e8f0" font-family="sans-serif" font-size="9.5">Username &amp; Password</text>
+                    <rect x="110" y="52" width="72" height="24" rx="6" fill="#2563eb"/>
+                    <text x="146" y="68" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5" font-weight="bold">OK</text>
+                    ${redArrow(186, 64, "تایید")}
+                  `, 176)
+                }
+              ]
+            }
+          ],
+          tip: "در صورت درخواست مجوز یا گواهی در ویندوز، تایید را بزنید تا اتصال کامل شود."
+        },
+        ios: {
+          title: "OpenConnect (Cisco Secure Client / AnyConnect) — iOS",
+          desc: "نصب برنامه از App Store و افزودن کانکشن در آیفون و آیپد",
+          actions: [
+            { label: "دانلود از App Store", url: "https://apps.apple.com/us/app/cisco-secure-client/id1135064690" }
+          ],
+          sections: [
+            {
+              steps: [
+                {
+                  title: "نصب برنامه از App Store و زدن Add VPN Connection",
+                  text: "برنامه را از لینک App Store نصب و باز کنید و روی <span class='ui-key'>Add VPN Connection...</span> ضربه بزنید.",
+                  svg: renderMockup("ios", "AnyConnect iOS", `
+                    <rect x="18" y="28" width="192" height="32" rx="8" fill="#172338" stroke="#ef4444" stroke-width="1.8"/>
+                    <text x="114" y="48" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="9.5" font-weight="bold">Add VPN Connection...</text>
+                    ${redArrow(212, 44, "افزودن")}
+                  `, 206)
+                },
+                {
+                  title: "وارد کردن Description و Server Address و زدن Save",
+                  text: "نام دلخواه در <span class='ui-key'>Description</span> و آدرس سرور را در <span class='ui-key'>Server Address</span> وارد کنید، روی <span class='ui-key'>Save</span> بزنید و سوئیچ اتصال را روشن کنید.",
+                  svg: renderMockup("ios", "New VPN Connection", `
+                    <rect x="14" y="16" width="200" height="24" rx="6" fill="#172338" stroke="#ef4444" stroke-width="1.6"/>
+                    <text x="24" y="32" fill="#fff" font-family="sans-serif" font-size="8.8">Description / Server Address</text>
+                    <rect x="64" y="48" width="100" height="26" rx="7" fill="#22c55e"/>
+                    <text x="114" y="65" text-anchor="middle" fill="#052e16" font-family="sans-serif" font-size="10" font-weight="bold">Save</text>
+                    ${redArrow(166, 61, "ذخیره")}
+                  `, 206)
+                },
+                {
+                  title: "تایید Allow در آیفون و وارد کردن نام کاربری و رمز",
+                  text: "پیغام <span class='ui-key'>Allow</span> آیفون را تایید کنید و سپس <span class='ui-key'>Username</span> و <span class='ui-key'>Password</span> خود را وارد نمایید تا متصل شوید.",
+                  svg: renderMockup("ios", "AnyConnect — Connected", `
+                    <rect x="14" y="34" width="200" height="38" rx="8" fill="#0f172a" stroke="#22c55e"/>
+                    <text x="26" y="57" fill="#4ade80" font-family="sans-serif" font-size="10" font-weight="bold">Connected</text>
+                    <rect x="166" y="45" width="36" height="18" rx="9" fill="#22c55e"/>
+                    ${redArrow(164, 54, "ON")}
+                  `, 206)
+                }
+              ]
+            }
+          ],
+          tip: "در iOS پس از تایید Allow، نام کاربری و رمز عبور خود را وارد کنید تا اتصال برقرار شود."
+        }
+      }
+    };
+
+    const QUICK_DOWNLOADS = {
+      android: [
+        { proto: "Amnezia", label: "Google Play", url: "https://play.google.com/store/apps/details?id=org.amnezia.vpn" },
+        { proto: "WireGuard", label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.wireguard.android" },
+        {
+          proto: "V2Ray (پیشنهادی: v2box | جایگزین: Hiddify)",
+          links: [
+            { label: "v2box", url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box", alt: false },
+            { label: "Hiddify", url: "https://play.google.com/store/apps/details?id=app.hiddify.com", alt: true }
+          ]
+        },
+        { proto: "OpenVPN", label: "Google Play", url: "https://play.google.com/store/apps/details?id=net.openvpn.openvpn" },
+        { proto: "OpenConnect", label: "Google Play", url: "https://play.google.com/store/apps/details?id=app.openconnect" }
+      ],
+      windows: [
+        { proto: "Amnezia", label: "Amnezia.org", url: "https://amnezia.org/downloads" },
+        { proto: "WireGuard", label: "دانلود (.exe)", url: "https://download.wireguard.com/windows-client/wireguard-installer.exe" },
+        {
+          proto: "V2Ray (Hiddify)",
+          links: [
+            { label: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases/latest", alt: true }
+          ]
+        },
+        { proto: "OpenVPN", label: "سایت رسمی", url: "https://openvpn.net/client/" },
+        { proto: "OpenConnect", label: "AnyConnect", url: "https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/series.html" },
+        { proto: "L2TP", label: "داخلی ویندوز", url: "" }
+      ],
+      ios: [
+        { proto: "Amnezia", label: "App Store", url: "https://apps.apple.com/app/amneziavpn/id1600529900" },
+        { proto: "WireGuard", label: "App Store", url: "https://apps.apple.com/app/wireguard/id1441195209" },
+        {
+          proto: "V2Ray (پیشنهادی: v2box | جایگزین: Hiddify)",
+          links: [
+            { label: "v2box", url: "https://apps.apple.com/app/v2box-v2ray-client/id6446814690", alt: false },
+            { label: "Hiddify", url: "https://apps.apple.com/app/hiddify-proxy-vpn/id6596777532", alt: true }
+          ]
+        },
+        { proto: "OpenVPN", label: "App Store", url: "https://apps.apple.com/app/openvpn-connect/id590379981" },
+        { proto: "OpenConnect", label: "App Store", url: "https://apps.apple.com/us/app/cisco-secure-client/id1135064690" },
+        { proto: "L2TP", label: "داخلی iOS", url: "" }
+      ]
+    };
+
+    let selectedProto = "v2ray";
+    let selectedOs = "android";
+
+    function isSupported(protoId, osId) {
+      return Boolean(GUIDES[protoId] && GUIDES[protoId][osId]);
+    }
+
+    function getUnsupportedHint(protoId) {
+      if (protoId === "l2tp") return "فقط ویندوز و iOS";
+      return "غیرفعال";
+    }
+
+    function renderBars() {
+      const protoBar = document.getElementById("protoBar");
+      protoBar.innerHTML = PROTOCOLS.map((p) => {
+        const active = p.id === selectedProto ? "active-proto" : "";
+        return `
+          <button type="button" class="glass-btn ${active}" data-proto="${p.id}" role="tab" aria-selected="${p.id === selectedProto}">
+            <span class="proto-icon-badge" aria-hidden="true">${PROTO_ICONS[p.id] || ""}</span>
+            <span>${p.name}</span>
+          </button>
+        `;
+      }).join("");
+
+      const osBar = document.getElementById("osBar");
+      osBar.innerHTML = OS_LIST.map((o) => {
+        const supported = isSupported(selectedProto, o.id);
+        const active = o.id === selectedOs && supported ? "active-os" : "";
+        const disabledAttr = supported ? "" : "disabled";
+        const tagHtml = supported ? "" : `<span class="btn-tag">${getUnsupportedHint(selectedProto)}</span>`;
+        return `
+          <button type="button" class="glass-btn ${active}" data-os="${o.id}" ${disabledAttr} role="tab" aria-selected="${o.id === selectedOs}">
+            <span>${o.name}</span>
+            ${tagHtml}
+          </button>
+        `;
+      }).join("");
+
+      protoBar.querySelectorAll(".glass-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedProto = btn.dataset.proto;
+          if (!isSupported(selectedProto, selectedOs)) {
+            selectedOs = "windows";
+          }
+          renderAll();
+        });
+      });
+
+      osBar.querySelectorAll(".glass-btn:not(:disabled)").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedOs = btn.dataset.os;
+          renderAll();
+        });
+      });
+    }
+
+    function renderGuide() {
+      const data = GUIDES[selectedProto][selectedOs];
+      document.getElementById("guideTitle").textContent = data.title;
+      document.getElementById("guideDesc").textContent = data.desc;
+
+      const actionWrap = document.getElementById("guideAction");
+      actionWrap.innerHTML = data.actions.map((act) => {
+        if (act.builtin || !act.url) {
+          return `<span class="dl-pill-btn builtin">${act.label}</span>`;
+        }
+        const secClass = act.secondary ? " secondary-dl" : "";
+        return `<a class="dl-pill-btn${secClass}" href="${act.url}" target="_blank" rel="noopener noreferrer">${act.label}</a>`;
+      }).join("");
+
+      const sectionsContainer = document.getElementById("sectionsContainer");
+      let stepCounter = 1;
+
+      sectionsContainer.innerHTML = data.sections.map((sec) => {
+        const headerHtml = sec.groupTitle ? `
+          <div class="sub-group-title${sec.isAlt ? " alt-style" : ""}">
+            <strong>${sec.groupTitle}</strong>
+            <span>${sec.groupDesc || ""}</span>
+          </div>
+        ` : "";
+
+        const itemsHtml = sec.steps.map((st) => {
+          const currentNum = stepCounter++;
+          return `
+            <li class="step-item">
+              <div class="step-body">
+                <span class="step-badge">${currentNum}</span>
+                <div class="step-copy">
+                  <h3>${st.title}</h3>
+                  <p>${st.text}</p>
+                </div>
+              </div>
+              <div class="svg-stage">${st.svg}</div>
+            </li>
+          `;
+        }).join("");
+
+        return `${headerHtml}<ol class="steps-list">${itemsHtml}</ol>`;
+      }).join("");
+
+      document.getElementById("tipBox").textContent = "نکته: " + data.tip;
+    }
+
+    function renderQuickDownloads() {
+      const grid = document.getElementById("quickDlGrid");
+      const titles = {
+        android: "اندروید",
+        windows: "ویندوز",
+        ios: "iOS"
+      };
+
+      grid.innerHTML = ["android", "windows", "ios"].map((osKey) => {
+        const items = QUICK_DOWNLOADS[osKey].map((item) => {
+          let rightSide = "";
+          if (Array.isArray(item.links)) {
+            rightSide = `<div class="quick-links-pair">` + item.links.map((l) => `
+              <a class="quick-link-pill${l.alt ? " alt" : ""}" href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>
+            `).join("") + `</div>`;
+          } else if (item.url) {
+            rightSide = `<a class="quick-link-pill" href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label}</a>`;
+          } else {
+            rightSide = `<span class="builtin-tag">${item.label}</span>`;
+          }
+          return `
+            <li>
+              <span>${item.proto}</span>
+              ${rightSide}
+            </li>
+          `;
+        }).join("");
+
+        return `
+          <div class="quick-card">
+            <h3>${titles[osKey]}</h3>
+            <ul class="quick-list">${items}</ul>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderAll() {
+      renderBars();
+      renderGuide();
+      renderQuickDownloads();
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
