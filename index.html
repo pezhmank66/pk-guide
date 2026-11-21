@@ -148,7 +148,7 @@
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.14);
       border-radius: 22px;
       padding: 18px 22px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -195,6 +195,63 @@
       color: #bae6fd;
       background: rgba(56, 189, 248, 0.14);
       border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    /* باکس خوش‌آمدگویی و نکات مهم سرویس ۲ کاربره */
+    .welcome-box {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 22px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+    }
+
+    .welcome-box h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #7dd3fc;
+      margin-bottom: 8px;
+    }
+
+    .welcome-intro {
+      font-size: 0.92rem;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+
+    .welcome-rules {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .welcome-rules li {
+      position: relative;
+      padding-right: 16px;
+    }
+
+    .welcome-rules li::before {
+      content: "•";
+      position: absolute;
+      right: 0;
+      color: var(--accent-cyan);
+      font-weight: 800;
+    }
+
+    .welcome-rules strong {
+      color: #ffffff;
+    }
+
+    .warn-text {
+      color: #fca5a5;
+      font-weight: 700;
     }
 
     /* نوارهای انتخاب شیشه‌ای */
@@ -609,7 +666,8 @@
       .proto-bar {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .guide-panel {
+      .guide-panel,
+      .welcome-box {
         padding: 15px;
       }
     }
@@ -639,6 +697,24 @@
       </div>
       <span class="header-pill">راهنمای مرحله‌به‌مرحله اتصال</span>
     </header>
+
+    <section class="welcome-box" aria-label="خوش‌آمدگویی و نکات مهم">
+      <h2>خوش آمدید!</h2>
+      <p class="welcome-intro">
+        از اینکه <strong>مجموعه ما</strong> را انتخاب کردید بسیار خوشحالیم. لطفاً متناسب با <strong>سرویس خریداری‌شده</strong> خود، آموزش مربوطه را انتخاب کرده و مرحله‌به‌مرحله پیش ببرید.
+      </p>
+      <ul class="welcome-rules">
+        <li>
+          <strong>دریافت هر دو کانفیگ در سرویس ۲ کاربره:</strong> اگر سرویس ۲ کاربره خریده‌اید، در لینک سابسکریپشنی که برایتان ارسال شده برای هر کاربر به‌صورت جداگانه کانفیگ قرار داده شده است؛ هنگام دانلود اشتراک حتماً <strong>هر دو کانفیگ</strong> را دریافت کنید.
+        </li>
+        <li>
+          <strong>جلوگیری از استفاده مشترک از یک کانفیگ:</strong> حواس‌تان باشد اشتباهاً <strong>یک کانفیگ را روی ۲ دستگاه وارد نکنید</strong>، زیرا این کار باعث <span class="warn-text">مسدود شدن اشتراک</span> می‌شود.
+        </li>
+        <li>
+          <strong>رعایت محدودیت تعداد دستگاه و مسئولیت مسدودی:</strong> در سرویس‌های ۲ کاربره، بیش از ۲ دستگاه وارد نکنید که باعث <span class="warn-text">مسدود شدن اشتراک</span> می‌شود و <span class="warn-text">عواقب مسدود شدن به عهده خود کاربر است</span>.
+        </li>
+      </ul>
+    </section>
 
     <div class="bar-label">۱. انتخاب سرویس:</div>
     <div class="proto-bar" id="protoBar" role="tablist" aria-label="انتخاب سرویس"></div>
